@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_clock_demo/clock/clock_painter_widget.dart';
 import 'package:riverpod_clock_demo/clock/clock_widget.dart';
 import 'package:riverpod_clock_demo/widget/country_selection_box.dart';
 
-import 'core/providers.dart';
 import 'core/utils.dart';
 
 class HomePage extends StatelessWidget {
@@ -23,16 +21,9 @@ class HomePage extends StatelessWidget {
               color: lightOrange,
               padding: const EdgeInsets.symmetric(vertical: 24),
               alignment: Alignment.center,
-              child: ClockWidget(
-                child: Consumer(
-                  builder: (_, ref, __) => ref.watch(timeStreamProvider).when(
-                        data: (time) => ClockPainterWidget(time: time),
-                        error: (_, __) => const ClockPainterWidget(time: null),
-                        loading: ref.watch(selectedZoneProvider) == null
-                            ? () => const ClockPainterWidget(time: null)
-                            : _loadingWidgetBuilder,
-                      ),
-                ),
+              child: const ClockWidget(
+                // TODO: Get time stream and pass it to the [ClockPainterWidget]
+                child: ClockPainterWidget(time: null),
               ),
             ),
           ),
@@ -40,20 +31,12 @@ class HomePage extends StatelessWidget {
             child: Container(
               alignment: Alignment.center,
               color: darkBlack,
-              child: Consumer(
-                builder: (_, ref, __) => ref.watch(zoneListProvider).when(
-                      data: (zones) => CountrySelectionBox(
-                        zonesList: zones,
-                        selectedCountry:
-                            ref.watch(selectedZoneProvider)?.countryZoneName ??
-                                'Tap to Select Country',
-                        onSelect: (selectedZone) => ref
-                            .read(selectedZoneProvider.notifier)
-                            .state = selectedZone,
-                      ),
-                      error: _errorWidgetBuilder,
-                      loading: _loadingWidgetBuilder,
-                    ),
+              // TODO: fetch the available zones' list
+              // TODO: set selected country
+              child: CountrySelectionBox(
+                zonesList: const [],
+                selectedCountry: 'Set Selected Country',
+                onSelect: (selectedZone) {},
               ),
             ),
           ),
